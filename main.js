@@ -106,54 +106,11 @@
 		}
 	}
 	//<iframe width="560" height="315" src="//60" height="315" src="<iframe width="560" height="315" src="https://www.youtube.com/embed/U9t-slLl30E?autoplay=1" frameborder="0" allowfullscreen></iframe>
-	-	function setupAnimations() {
- -		var numKeyFrames = 10
- -		var introKeyFrames = '';
- -		var turntKeyFrames = [];
- -		var jitterAmount = 10;
- -		for(var i = 0; i < numTurntAnimations; i++) {
- -			turntKeyFrames[i] = ''
- -		}
- -		for(var i = 0; i <= numKeyFrames; i++) {
- -			var pct = i / numKeyFrames * 100 + '%';
- -
- -			var x = (Math.random() - 0.5) * jitterAmount
- -			var y = (Math.random() - 0.5) * jitterAmount
- -			x = ~~ x
- -			y = ~~ y
- -			var keyframe = '-webkit-transform: translate(' + x + 'px,' + y +'px); '
- -			keyframe += 'transform: translate(' + x + 'px,' + y + 'px);'
- -			introKeyFrames += pct + ' { ' + keyframe + ' } '
- -			for(var j = 0; j < numTurntAnimations; j++) {
- -				var x = (Math.random() - 0.5) * jitterAmount
- -				var y = (Math.random() - 0.5) * jitterAmount
- -				x = ~~ x
- -				y = ~~ y
- -				var rotationAmount = i / numKeyFrames * 360;
- -				rotationAmount = ~~ rotationAmount
- -				var rotateDirection = String.fromCharCode(88 + ~~ (Math.random() * 2))
- -				var keyframe = '-webkit-transform: translate(' + x + 'px,' + y +'px) rotate' + rotateDirection + '(' + rotationAmount + 'deg); '
- -				keyframe += 'transform: translate(' + x + 'px,' + y + 'px) rotate' + rotateDirection + '(' + rotationAmount + 'deg); '
- -				turntKeyFrames[j] += pct + ' { ' + keyframe + ' }'
- -
- -			}
- -
- -		}
- -		var introKeyFrameDef = '@-webkit-keyframes tdfwIntro { ' + introKeyFrames + ' } '
- -		introKeyFrameDef += '@keyframes tdfwIntro { ' + introKeyFrames + ' } '
- -
- -
- -		var allStyles = introKeyFrameDef
- -
- -		for(var i = 0; i < turntKeyFrames.length; i++) {
- -			var kf = turntKeyFrames[i]
- -			allStyles += '@-webkit-keyframes turntDown' + i + ' { ' + kf + ' } '
- -			allStyles += '@keyframes turntDown' + i + ' { ' + kf + ' } '
- -		}
- -		var introClass = '.tdfw_intro { -webkit-animation: tdfw 1s infinite; animation: tdfw 1s infinite; } '
- -		//allStyles += introClass
- -		var style = document.createElement('style')
- -		style.textContent = allStyles
- -		document.body.appendChild(style)
- -	}
 	
+	
+
+		embedVideo()
+	}
+	init()
+
+})()
