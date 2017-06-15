@@ -107,9 +107,124 @@
 	}
 	//<iframe width="560" height="315" src="//60" height="315" src="<iframe width="560" height="315" src="https://www.youtube.com/embed/U9t-slLl30E?autoplay=1" frameborder="0" allowfullscreen></iframe>
 	
+	function setupAnimations() {
+		var numKeyFrames = 10
+		var introKeyFrames = '';
+		var turntKeyFrames = [];
+		var jitterAmount = 10;
+		for(var i = 0; i < numTurntAnimations; i++) {
+			turntKeyFrames[i] = ''
+		}
+		for(var i = 0; i <= numKeyFrames; i++) {
+			var pct = i / numKeyFrames * 100 + '%';
+
+			var x = (Math.random() - 0.5) * jitterAmount
+			var y = (Math.random() - 0.5) * jitterAmount
+			x = ~~ x
+			y = ~~ y
+			var keyframe = '-webkit-transform: translate(' + x + 'px,' + y +'px); '
+			keyframe += 'transform: translate(' + x + 'px,' + y + 'px);'
+			introKeyFrames += pct + ' { ' + keyframe + ' } '
+			for(var j = 0; j < numTurntAnimations; j++) {
+				var x = (Math.random() - 0.5) * jitterAmount
+				var y = (Math.random() - 0.5) * jitterAmount
+				x = ~~ x
+				y = ~~ y
+				var rotationAmount = i / numKeyFrames * 360;
+				rotationAmount = ~~ rotationAmount
+				var rotateDirection = String.fromCharCode(88 + ~~ (Math.random() * 2))
+				var keyframe = '-webkit-transform: translate(' + x + 'px,' + y +'px) rotate' + rotateDirection + '(' + rotationAmount + 'deg); '
+				keyframe += 'transform: translate(' + x + 'px,' + y + 'px) rotate' + rotateDirection + '(' + rotationAmount + 'deg); '
+				turntKeyFrames[j] += pct + ' { ' + keyframe + ' }'
+
+			}
+
+		}
+		var introKeyFrameDef = '@-webkit-keyframes tdfwIntro { ' + introKeyFrames + ' } '
+		introKeyFrameDef += '@keyframes tdfwIntro { ' + introKeyFrames + ' } '
+
+
+		var allStyles = introKeyFrameDef
+
+		for(var i = 0; i < turntKeyFrames.length; i++) {
+			var kf = turntKeyFrames[i]
+			allStyles += '@-webkit-keyframes turntDown' + i + ' { ' + kf + ' } '
+			allStyles += '@keyframes turntDown' + i + ' { ' + kf + ' } '
+		}
+		var introClass = '.tdfw_intro { -webkit-animation: tdfw 1s infinite; animation: tdfw 1s infinite; } '
+		//allStyles += introClass
+		var style = document.createElement('style')
+		style.textContent = allStyles
+		document.body.appendChild(style)
+	}
 	
 
+	function addCurStyles() {
+
+		var curClass = getCurClass()
+		var nodes = Array.prototype.slice.call(document.querySelectorAll('img'))
+		nodes = nodes.concat(Array.prototype.slice.call(document.querySelectorAll('div')))
+		nodes = nodes.concat(Array.prototype.slice.call(document.querySelectorAll('span')))
+		nodes = nodes.concat(Array.prototype.slice.call(document.querySelectorAll('a')))
+		nodes = nodes.concat(Array.prototype.slice.call(document.querySelectorAll('section, header, footer, video, iframe, nav, article, h1, h2, h3, h4, h5, h6, footer, main, p, pre, blockquote, ol, ul, li, embed, object, canvas, svg, form, input, select, button')))
+
+		var max = maxNodes < nodes.length ? maxNodes : nodes.length;
+
+		//console.log(nodes)
+		//console.log(max)
+		for(var i = 0; i < max ; i++) {
+			var node = nodes[i];
+			
+			node.classList.add(curClass)
+			var delay = Math.round(Math.random() * 1000) / 1000 + 'ms'
+			if(firstAddition) {
+				delay = ~~ (Math.random() * 10) + 's'
+			}
+			var css = animationCSS[curClass];
+			if(typeof css === 'function') {
+				css = css()
+			}
+			node.style['webkitAnimation'] = css + ' ' + delay 
+			node.style['animation'] = css + ' ' + delay
+
+		}
+		firstAddition = false
+
+	}
+	function removeCurStyles() {
+		var classes = allClasses()
+		var nodes = document.querySelectorAll('*')
+		for(var i = 0; i < nodes.length ; i++) {
+			var node = nodes[i];
+			for(var j = 0; j < classes.length; j++) {
+				var cl = classes[j]
+				node.classList.remove(cl)
+				node.style['webkitAnimation'] = ''
+				node.style['animation'] = ''
+
+			}
+		}
+	}
+	function allClasses() {
+		return ['tdfw_intro', 'turntDown']
+	}
+	function getCurClass() {
+		if(player.getCurrentTime() > turndownAt) {
+			return 'turntDown'
+		} else {
+			return 'tdfw_intro'
+		}
+
+	}
+
+	function init() {
+		if(typeof window.tdfw________TDFW !== 'undefined') {
+			return;
+		}
+		window.tdfw________TDFW = true;
+
 		embedVideo()
+		setupAnimations()
 	}
 	init()
 
